@@ -2,6 +2,7 @@ package com.yourplayer.c.yourplayer1;
 
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.*;
 import android.support.v7.app.AppCompatActivity;
 import android.view.*;
 import android.view.inputmethod.*;
@@ -90,9 +91,27 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos,
                                     long id) {
-                Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
-                intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
-                startActivity(intent);
+
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                DialogFragment newFragment = MyDialogFragment.newInstance(mStackLevel);
+                newFragment.show(ft, "dialog");
+
+
+
+
+
+                // Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
+               // intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
+               // startActivity(intent);
             }
 
         });
