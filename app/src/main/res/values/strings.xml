@@ -2,4 +2,7 @@
     <string name="app_name">YourPlayer1</string>
     <string name="search">Search</string>
     <string name="failed">Failed to initialize Youtube Player</string>
+    <string name="sign_in">Sign In</string>
+    <string name="loading">loading...</string>
+    <string name="signed_in_fmt">Signed in as: %s</string>
 </resources>

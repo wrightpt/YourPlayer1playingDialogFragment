@@ -4,6 +4,7 @@ import android.content.*;
 import android.os.*;
 import android.support.v4.app.*;
 import android.support.v7.app.AppCompatActivity;
+import android.util.*;
 import android.view.*;
 import android.view.inputmethod.*;
 import android.widget.*;
@@ -37,17 +38,17 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         searchInput = (EditText)findViewById(R.id.search_input);
         videosFound = (ListView)findViewById(R.id.videos_found);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+    //    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+             //   .requestEmail()
+             //   .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addOnConnectionFailedListener(this)
+     //   mGoogleApiClient = new GoogleApiClient.Builder(this)
+            //    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+             //   .addOnConnectionFailedListener(this)
                 //   .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) )
 
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(AppIndex.API).build();
+            //    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+             //   .addApi(AppIndex.API).build();
 
 
 
@@ -155,6 +156,37 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //  Handle action bar item clicks here. The action bar will
+        //  automatically handle clicks on the Home/Up button, so long
+        //  as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+
+        switch (item.getItemId()) {
+
+
+
+            case R.id.sign_in:
+                Log.d("sign_in_button1","sign in button1");
+                Intent myintent = new Intent(SearchActivity.this,SignInActivity.class);
+                SearchActivity.this.startActivity(myintent);
+             //   signIn();
+                return true;
+
+
+            // if (id == R.id.action_settings) {
+
+            // }
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 

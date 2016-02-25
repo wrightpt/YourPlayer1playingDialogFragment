@@ -10,11 +10,13 @@ package com.yourplayer.c.yourplayer1;
         import android.app.ProgressDialog;
         import android.content.Intent;
         import android.os.Bundle;
+        import android.support.annotation.*;
         import android.support.v7.app.AppCompatActivity;
         import android.util.Log;
         import android.view.View;
         import android.widget.TextView;
 
+        import com.google.android.gms.appindexing.*;
         import com.google.android.gms.auth.api.Auth;
         import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
         import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -31,8 +33,10 @@ package com.yourplayer.c.yourplayer1;
  * profile.
  */
 public class SignInActivity extends AppCompatActivity implements
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks
+
+
+         {
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -44,15 +48,15 @@ public class SignInActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
+       // mStatusTextView = (TextView) findViewById(R.id.status);
 
         // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+      //  findViewById(R.id.sign_in_button).setOnClickListener(this);
+      //  findViewById(R.id.sign_out_button).setOnClickListener(this);
+      //  findViewById(R.id.disconnect_button).setOnClickListener(this);
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -67,8 +71,17 @@ public class SignInActivity extends AppCompatActivity implements
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addOnConnectionFailedListener(this)
+                //   .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) )
+
+                //   .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+
+
+
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(AppIndex.API)
                 .build();
+
         // [END build_client]
 
         // [START customize_button]
@@ -79,9 +92,9 @@ public class SignInActivity extends AppCompatActivity implements
         // may be displayed when only basic profile is requested. Try adding the
         // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
         // difference.
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setScopes(gso.getScopeArray());
+       // SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+       // signInButton.setSize(SignInButton.SIZE_STANDARD);
+      //  signInButton.setScopes(gso.getScopeArray());
         // [END customize_button]
     }
 
@@ -131,10 +144,10 @@ public class SignInActivity extends AppCompatActivity implements
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            updateUI(true);
+          //  updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
-            updateUI(false);
+         //   updateUI(false);
         }
     }
     // [END handleSignInResult]
@@ -153,7 +166,7 @@ public class SignInActivity extends AppCompatActivity implements
                     @Override
                     public void onResult(Status status) {
                         // [START_EXCLUDE]
-                        updateUI(false);
+                       // updateUI(false);
                         // [END_EXCLUDE]
                     }
                 });
@@ -167,7 +180,7 @@ public class SignInActivity extends AppCompatActivity implements
                     @Override
                     public void onResult(Status status) {
                         // [START_EXCLUDE]
-                        updateUI(false);
+                       // updateUI(false);
                         // [END_EXCLUDE]
                     }
                 });
@@ -197,32 +210,41 @@ public class SignInActivity extends AppCompatActivity implements
         }
     }
 
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
+  //  private void updateUI(boolean signedIn) {
+  //      if (signedIn) {
+   //         findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+   //         findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+   //     } else {
+   //         mStatusTextView.setText(R.string.signed_out);
 
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-        }
+   //         findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+    //        findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+    //    }
+ //   }
+
+   // @Override
+  //  public void onClick(View v) {
+  //      switch (v.getId()) {
+   //         case R.id.sign_in_button:
+     //           signIn();
+     //           break;
+    //        case R.id.sign_out_button:
+     //           signOut();
+     //           break;
+     //       case R.id.disconnect_button:
+     //           revokeAccess();
+     //           break;
+   //     }
+   // }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
-                break;
-        }
+    public void onConnectionSuspended(int i) {
+
     }
 }
-public class SignInActivity {
-}
+
