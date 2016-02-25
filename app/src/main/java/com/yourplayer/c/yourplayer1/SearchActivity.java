@@ -8,14 +8,24 @@ import android.view.*;
 import android.view.inputmethod.*;
 import android.widget.*;
 
+import com.google.android.gms.appindexing.*;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.*;
+import com.google.android.gms.common.api.*;
 import com.squareup.picasso.*;
 
 import java.util.*;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private ListView videosFound;
     private EditText searchInput;
+    private GoogleApiClient mGoogleApiClient;
 
     private Handler handler;
 
@@ -26,6 +36,18 @@ public class SearchActivity extends AppCompatActivity {
 
         searchInput = (EditText)findViewById(R.id.search_input);
         videosFound = (ListView)findViewById(R.id.videos_found);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addOnConnectionFailedListener(this)
+                //   .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) )
+
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(AppIndex.API).build();
 
 
 
@@ -120,5 +142,19 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 }
 
