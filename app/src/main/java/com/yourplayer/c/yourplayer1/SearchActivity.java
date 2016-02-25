@@ -27,6 +27,8 @@ public class SearchActivity extends AppCompatActivity {
         searchInput = (EditText)findViewById(R.id.search_input);
         videosFound = (ListView)findViewById(R.id.videos_found);
 
+
+
         handler = new Handler();
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -102,7 +104,7 @@ public class SearchActivity extends AppCompatActivity {
                 ft.addToBackStack(null);
 
                 // Create and show the dialog.
-                DialogFragment newFragment = MyDialogFragment.newInstance(mStackLevel);
+                DialogFragment newFragment = DialogFragment1.newInstance(searchResults.get(pos).getId());
                 newFragment.show(ft, "dialog");
 
 
@@ -110,7 +112,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
                 // Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
-               // intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
+                //intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
                // startActivity(intent);
             }
 

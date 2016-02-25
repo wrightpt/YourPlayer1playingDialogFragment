@@ -35,4 +35,6 @@ dependencies {
     compile files('libs/jsr305-1.3.9.jar')
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile 'com.squareup.picasso:picasso:2.3.2'
+
 }
+apply plugin: 'com.google.gms.google-services'
