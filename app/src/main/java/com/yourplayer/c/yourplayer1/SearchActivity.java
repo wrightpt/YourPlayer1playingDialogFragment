@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.*;
 import com.google.android.gms.common.api.*;
+import com.google.api.services.youtube.model.*;
 import com.squareup.picasso.*;
 
 import java.util.*;
@@ -34,6 +35,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
