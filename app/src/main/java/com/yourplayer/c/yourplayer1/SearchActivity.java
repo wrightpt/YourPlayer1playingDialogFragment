@@ -1,6 +1,7 @@
 package com.yourplayer.c.yourplayer1;
 
 import android.content.*;
+import android.net.*;
 import android.os.*;
 import android.support.v4.app.*;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private ListView videosFound;
     private EditText searchInput;
     private GoogleApiClient mGoogleApiClient;
+    private static final int RC_SIGN_IN = 9001;
 
     private Handler handler;
 
@@ -38,17 +40,19 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         searchInput = (EditText)findViewById(R.id.search_input);
         videosFound = (ListView)findViewById(R.id.videos_found);
 
-    //    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-             //   .requestEmail()
-             //   .build();
+      GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+               .requestEmail()
+               .build();
 
-     //   mGoogleApiClient = new GoogleApiClient.Builder(this)
-            //    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-             //   .addOnConnectionFailedListener(this)
-                //   .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) )
+      mGoogleApiClient = new GoogleApiClient.Builder(this)
+               .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+               .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
 
-            //    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-             //   .addApi(AppIndex.API).build();
+              // .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) )
+
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(AppIndex.API).build();
 
 
 
@@ -128,6 +132,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
                 // Create and show the dialog.
                 DialogFragment newFragment = DialogFragment1.newInstance(searchResults.get(pos).getId());
+
+                newFragment.setStyle(DialogFragment.STYLE_NO_TITLE,0);
                 newFragment.show(ft, "dialog");
 
 
@@ -158,13 +164,24 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        return true;
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //  Handle action bar item clicks here. The action bar will
         //  automatically handle clicks on the Home/Up button, so long
         //  as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+
+         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 
@@ -174,9 +191,9 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
             case R.id.sign_in:
                 Log.d("sign_in_button1","sign in button1");
-                Intent myintent = new Intent(SearchActivity.this,SignInActivity.class);
-                SearchActivity.this.startActivity(myintent);
-             //   signIn();
+               // Intent myintent = new Intent(SearchActivity.this,SignInActivity.class);
+               // SearchActivity.this.startActivity(myintent);
+             signIn();
                 return true;
 
 
@@ -187,6 +204,55 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("onstart", "onstart");
+        mGoogleApiClient.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Search Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+               // com.yourplayer.c.yourplayer1
+                Uri.parse("android-app://com.yourplayer.c.yourplayer1/http/host/path")
+               // Uri.parse("android-app://com.patrick.c.simpleplayer1_13_16/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(mGoogleApiClient, viewAction);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Search Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.yourplayer.c.yourplayer1/http/host/path")
+                //Uri.parse("android-app://com.patrick.c.simpleplayer1_13_16/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(mGoogleApiClient, viewAction);
+        mGoogleApiClient.disconnect();
+    }
+
+    private void signIn() {
+        Log.d("sign in", "sign in");
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient );
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 }
 
