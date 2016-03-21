@@ -21,7 +21,6 @@ import com.google.android.gms.common.*;
 import com.google.android.gms.common.api.*;
 import com.google.api.services.youtube.model.*;
 import com.squareup.picasso.*;
-
 import java.util.*;
 
 public class SearchActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
@@ -149,6 +148,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
         });
     }
+
 
 
     @Override
