@@ -1,7 +1,12 @@
 package com.yourplayer.c.yourplayer1;
 
+import android.app.*;
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.*;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.*;
 import android.view.inputmethod.*;
@@ -90,12 +95,56 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos,
                                     long id) {
-                Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
-                intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
-                startActivity(intent);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                DialogFragment newFragment = DialogFragment1.newInstance(searchResults.get(pos).getId());
+                //DialogFragment2 newFragment = new DialogFragment2();
+               // FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                //transaction.replace(R.id.framelayoutaschild, newFragment);
+                //transaction.commit();
+
+                //DialogFragment newFragment2 = DialogFragment2.
+
+
+
+               newFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+                newFragment.show(ft, "dialog");
+
+
+
+
+                // Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
+               // intent.putExtra("VIDEO_ID", searchResults.get(pos).getId());
+               // startActivity(intent);
             }
 
         });
+    }
+
+    void showDialog() {
+        //mStackLevel++;
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+        android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+      //  DialogFragment newFragment = DialogFragment2.newInstance();
+      //  newFragment.show(ft, "dialog");
     }
 
 
